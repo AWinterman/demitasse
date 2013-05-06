@@ -14,7 +14,7 @@ var cork = require("cork")
 
 cork.route("/")
     .on("GET", function(){
-        "hello world"
+        return "hello world"
     })
        
 ```
@@ -27,6 +27,7 @@ of response and the data type etc. for you.
 ## TODO ##
 - make sure I'm not redundant with any of [these][1] libraries
 - try to find similar functionality on NPM
+- explore API options
 - url routing
 - reverse url routing 
 - consider api more carefully
