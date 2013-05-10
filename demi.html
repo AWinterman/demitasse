@@ -19,8 +19,8 @@
           <div id="jump_page">
             
               
-              <a class="source" href="cork.html">
-                cork.js
+              <a class="source" href="demi.html">
+                demi.js
               </a>
             
               
@@ -193,9 +193,9 @@ Otherwise it returns a stream that only emits 404 events</p>
             <div class="content"><div class='highlight'><pre>proto.run = <span class="keyword">function</span>(port){
   <span class="keyword">var</span> self = <span class="keyword">this</span>
     , file = <span class="keyword">new</span>(nodeStatic.Server)(<span class="keyword">this</span>.static_root)
-    , server = http.createServer(cork_server)
+    , server = http.createServer(demi_server)
 
-  <span class="function"><span class="keyword">function</span> <span class="title">cork_server</span><span class="params">(req, resp)</span> {</span>
+  <span class="function"><span class="keyword">function</span> <span class="title">demi_server</span><span class="params">(req, resp)</span> {</span>
     <span class="keyword">var</span> parsed = url.parse(req.url, <span class="literal">true</span>)
       , pathname = parsed.pathname
       , query = parsed.query || {}
