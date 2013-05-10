@@ -9,17 +9,17 @@ In your index.js file, you might have
 
 ```javascript
 
-var cork = require("cork")
+var demi = require("cork")
   , through = require("through")
 
-cork.route("/")
+demi.route("/")
     .on("GET", function(){
         return "hello world"
     })
        
 ```
 
-Then from the command line you might run `cork run`, navigate to
+Then from the command line you might run `demi run`, navigate to
 localhost:8000, and view the rendered string.  This will handle the streaming
 of response and the data type etc. for you.
 

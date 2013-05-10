@@ -19,8 +19,8 @@
           <div id="jump_page">
             
               
-              <a class="source" href="cork.html">
-                cork.js
+              <a class="source" href="demi.html">
+                demi.js
               </a>
             
               
@@ -61,28 +61,28 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> Cork = require(<span class="string">"./lib/cork"</span>)
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> Cork = require(<span class="string">"./lib/demi"</span>)
   , fs = require(<span class="string">"fs"</span>)
   , url = require(<span class="string">"url"</span>)
 
-cork = <span class="keyword">new</span> Cork(<span class="string">"./docs"</span>)
+demi = <span class="keyword">new</span> Cork(<span class="string">"./docs"</span>)
 
-cork.route(<span class="string">"^/$"</span>, <span class="string">"index.html"</span>)
+demi.route(<span class="string">"^/$"</span>, <span class="string">"index.html"</span>)
     .on(<span class="string">"GET"</span>, <span class="keyword">function</span>(req){
       <span class="keyword">return</span> fs.readFileSync(<span class="string">"docs/index.html"</span>)
     })
 
-cork.route(<span class="string">"cork.*"</span>)
+demi.route(<span class="string">"cork.*"</span>)
     .on(<span class="string">"GET"</span>, <span class="keyword">function</span>(req){
-      <span class="keyword">return</span> fs.readFileSync(<span class="string">"docs/cork.html"</span>)
+      <span class="keyword">return</span> fs.readFileSync(<span class="string">"docs/demi.html"</span>)
     })
 
-cork.route(<span class="string">"^/stream_handler*"</span>)
+demi.route(<span class="string">"^/stream_handler*"</span>)
     .on(<span class="string">"GET"</span>, <span class="keyword">function</span>(req){
       <span class="keyword">return</span> fs.readFileSync(<span class="string">"docs/stream_handler.html"</span>)
     })
 
-cork.route(<span class="string">".*\.css"</span>)
+demi.route(<span class="string">".*\.css"</span>)
     .on(<span class="string">"GET"</span>, <span class="keyword">function</span>(req){
       <span class="keyword">var</span> parsed = url.parse(req.url, <span class="literal">true</span>)
       <span class="keyword">return</span> fs.readFileSync(<span class="string">"docs/"</span> + parsed.pathname)
@@ -90,7 +90,7 @@ cork.route(<span class="string">".*\.css"</span>)
 
 
 
-cork.run(<span class="number">8769</span>)</pre></div></div>
+demi.run(<span class="number">8769</span>)</pre></div></div>
             
         </li>
         
