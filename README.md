@@ -1,4 +1,4 @@
-# Cork #
+# Demi #
 A [flask][0]-inspired microframework for nodejs.
 
 Uses event based logic to handle routing. 
