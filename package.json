@@ -1,6 +1,6 @@
 {
   "name": "demi",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Flask your node",
   "main": "index.js",
   "dependencies": {
