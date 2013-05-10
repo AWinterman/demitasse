@@ -1,4 +1,4 @@
-var Demi = require("./lib/demi")
+var Demi = require("../lib/demi")
   , fs = require("fs")
   , url = require("url")
 

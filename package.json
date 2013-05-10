@@ -3,10 +3,7 @@
   "version": "0.0.1",
   "description": "Flask your node",
   "main": "index.js",
-  "dependencies": {
-    "qs": "~0.6.4",
-    "through": "~2.3.4"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "scripts": {
     "test": "test.js",
