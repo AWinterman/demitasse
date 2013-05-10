@@ -1,15 +1,15 @@
-var Cork = require("../lib/demi")
+var Demi = require("../lib/demi")
   , fs = require("fs")
   , url = require("url")
 
-demi = new Cork("./docs")
+demi = new Demi("./docs")
 
 demi.route("^/$", "index.html")
     .on("GET", function(req){
       return fs.readFileSync("docs/index.html")
     })
 
-demi.route("cork.*")
+demi.route("demi.*")
     .on("GET", function(req){
       return fs.readFileSync("docs/demi.html")
     })

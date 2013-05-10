@@ -9,8 +9,7 @@ In your index.js file, you might have
 
 ```javascript
 
-var demi = require("cork")
-  , through = require("through")
+var Demi = new require("demi")
 
 demi.route("/")
     .on("GET", function(){
