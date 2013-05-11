@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>Cork</title>
+  <title>Demi</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -24,16 +24,6 @@
               </a>
             
               
-              <a class="source" href="demo-app.html">
-                demo-app.js
-              </a>
-            
-              
-              <a class="source" href="index.html">
-                index.js
-              </a>
-            
-              
               <a class="source" href="stream_handler.html">
                 stream_handler.js
               </a>
@@ -52,20 +42,19 @@
               <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>Cork</h1>
-<h4>Cork is a micro-framework for javascript based on flask.</h4>
+              <h1>Demi</h1>
+<h4>Demi is a micro-framework for javascript based on flask.</h4>
 <p>It implements a nice api which was inspired by flask&#39;s use of decorator
 expressions. It is still a work in progress, so feel free to pitchin.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = Cork
+            <div class="content"><div class='highlight'><pre>module.exports = Demi
 
 <span class="keyword">var</span> StreamHandler = require(<span class="string">'./stream_handler'</span>)
   , http = require(<span class="string">"http"</span>)
   , url = require(<span class="string">"url"</span>)
-  , Stream = require(<span class="string">"stream"</span>)
-  , nodeStatic = require(<span class="string">"node-static"</span>)</pre></div></div>
+  , Stream = require(<span class="string">"stream"</span>)</pre></div></div>
             
         </li>
         
@@ -76,19 +65,19 @@ expressions. It is still a work in progress, so feel free to pitchin.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Initialize Cork with an array of routes</p>
+              <p>Initialize Demi with an array of routes</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">Cork</span><span class="params">(static_root)</span>{</span>
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">Demi</span><span class="params">(static_root)</span>{</span>
   <span class="keyword">this</span>.static_root = static_root
   <span class="keyword">this</span>.routes = []
 }
 
 
 
-<span class="keyword">var</span> proto = Cork.prototype
-  , cons = Cork
+<span class="keyword">var</span> proto = Demi.prototype
+  , cons = Demi
 proto.constructor = cons</pre></div></div>
             
         </li>
@@ -192,7 +181,6 @@ Otherwise it returns a stream that only emits 404 events</p>
             
             <div class="content"><div class='highlight'><pre>proto.run = <span class="keyword">function</span>(port){
   <span class="keyword">var</span> self = <span class="keyword">this</span>
-    , file = <span class="keyword">new</span>(nodeStatic.Server)(<span class="keyword">this</span>.static_root)
     , server = http.createServer(demi_server)
 
   <span class="function"><span class="keyword">function</span> <span class="title">demi_server</span><span class="params">(req, resp)</span> {</span>
