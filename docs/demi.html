@@ -54,8 +54,7 @@ expressions. It is still a work in progress, so feel free to pitchin.</p>
 <span class="keyword">var</span> StreamHandler = require(<span class="string">'./stream_handler'</span>)
   , http = require(<span class="string">"http"</span>)
   , url = require(<span class="string">"url"</span>)
-  , Stream = require(<span class="string">"stream"</span>)
-  , nodeStatic = require(<span class="string">"node-static"</span>)</pre></div></div>
+  , Stream = require(<span class="string">"stream"</span>)</pre></div></div>
             
         </li>
         
@@ -182,7 +181,6 @@ Otherwise it returns a stream that only emits 404 events</p>
             
             <div class="content"><div class='highlight'><pre>proto.run = <span class="keyword">function</span>(port){
   <span class="keyword">var</span> self = <span class="keyword">this</span>
-    , file = <span class="keyword">new</span>(nodeStatic.Server)(<span class="keyword">this</span>.static_root)
     , server = http.createServer(demi_server)
 
   <span class="function"><span class="keyword">function</span> <span class="title">demi_server</span><span class="params">(req, resp)</span> {</span>
