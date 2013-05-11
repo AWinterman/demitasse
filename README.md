@@ -1,4 +1,4 @@
-# Demi #
+# Demitasse #
 A [flask][0]-inspired microframework for nodejs.
 
 Uses event based logic to handle routing. 
@@ -18,8 +18,16 @@ demi.route("/")
        
 ```
 
+
+
 Then from the command line you might run `demi run`, navigate to
 localhost:8000, and view the rendered string.  This will handle the streaming
 of response and the data type etc. for you.
+
+
+## Install ##
+
+``` npm install demi ``
+
 
 [0]: http://flask.pocoo.org/

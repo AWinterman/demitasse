@@ -2,21 +2,23 @@
   "name": "demi",
   "version": "0.0.2-1",
   "description": "Flask your node",
-  "main": "index.js",
+  "main": "lib/demi.js",
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
     "test": "test.js",
-    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AWinterman/demi.git"
+    "url": "https://github.com/AWinterman/demitasse"
   },
   "keywords": [
     "Flask",
     "mircoframework",
-    "web"
+    "web",
+    "micro framework",
+    "framework",
+    "API"
   ],
   "author": "Andrew Winterman",
   "license": "MIT",
