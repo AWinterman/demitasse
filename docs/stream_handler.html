@@ -19,6 +19,11 @@
           <div id="jump_page">
             
               
+              <a class="source" href="docs-example.html">
+                docs-example.js
+              </a>
+            
+              
               <a class="source" href="demi.html">
                 demi.js
               </a>
@@ -51,11 +56,15 @@ route in Cork. </p>
             <div class="content"><div class='highlight'><pre>module.exports = StreamHandler
 
 <span class="keyword">var</span> Stream = require(<span class="string">"stream"</span>)
+  , ap = require(<span class="string">"ap"</span>)
 
 
 <span class="function"><span class="keyword">function</span> <span class="title">StreamHandler</span><span class="params">()</span>{</span>
   <span class="keyword">this</span>.stream = <span class="keyword">new</span> Stream
+  <span class="keyword">this</span>.embedded_args = []
 }
+
+
 
 <span class="keyword">var</span> proto = StreamHandler.prototype
   , cons = StreamHandler
@@ -88,12 +97,21 @@ supplied it will be evaluated and included in the response header.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>proto.on = <span class="keyword">function</span>(name, callback, response_headers){
-  <span class="keyword">var</span> current_listeners = <span class="keyword">this</span>.stream.listeners(name)
-  <span class="keyword">if</span> (current_listeners){
+            <div class="content"><div class='highlight'><pre>proto.on = <span class="keyword">function</span>(name, callback, response_headers, cleanup){
+  <span class="keyword">if</span> (<span class="keyword">this</span>.stream.listeners(name)){
     <span class="keyword">this</span>.stream.removeAllListeners(name)
   }
-  <span class="keyword">this</span>.stream.on(name, framework_for_response.call(<span class="keyword">this</span>, callback, response_headers))
+
+  console.log(name)
+  <span class="keyword">this</span>.stream.on(
+      name
+    , framework_for_response.bind(<span class="keyword">this</span>, callback, response_headers, cleanup)
+  )
+  <span class="keyword">return</span> <span class="keyword">this</span>
+}
+
+proto.register = <span class="keyword">function</span>(args) {
+  <span class="keyword">this</span>.embedded_args = args
   <span class="keyword">return</span> <span class="keyword">this</span>
 }</pre></div></div>
             
@@ -114,14 +132,27 @@ the the response_headers object. It is meant to be called with
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">framework_for_response</span><span class="params">(callback, response_headers)</span>{</span>
-  response_headers = response_headers || <span class="keyword">function</span>(x){ <span class="keyword">return</span> x }
-  <span class="keyword">var</span> self = <span class="keyword">this</span>
-  <span class="keyword">return</span> <span class="keyword">function</span>(req) {
-    <span class="keyword">var</span> str = callback(req)
-    self.stream.emit(<span class="string">"headers"</span>, response_headers(req))
-    <span class="keyword">if</span> (callback) self.stream.emit(<span class="string">"data"</span>, str)
-    self.stream.emit(<span class="string">"end"</span>)
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">framework_for_response</span><span class="params">(callback, response_headers, cleanup, embedded_args)</span>{</span>
+  <span class="keyword">var</span> response_headers = response_headers || identity
+    , callback = callback || identity 
+    , cleanup = cleanup || identity
+
+  <span class="function"><span class="keyword">function</span> <span class="title">identity</span><span class="params">(x)</span> {</span> <span class="keyword">return</span> x }
+
+  <span class="keyword">this</span>.stream.emit(<span class="string">"headers"</span>, wrapped_response_headers)
+  <span class="keyword">this</span>.stream.emit(<span class="string">"data"</span>, wrapped_callback)
+  <span class="keyword">this</span>.stream.emit(<span class="string">"end"</span>, wrapped_end)
+
+  <span class="function"><span class="keyword">function</span> <span class="title">wrapped_response_headers</span><span class="params">(req)</span>{</span>
+    <span class="keyword">return</span> response_headers(req)
+  }
+
+  <span class="function"><span class="keyword">function</span> <span class="title">wrapped_callback</span><span class="params">(req)</span> {</span>
+    <span class="keyword">return</span> callback(req)
+  }
+
+  <span class="function"><span class="keyword">function</span> <span class="title">wrapped_end</span><span class="params">(end)</span> {</span>
+    <span class="keyword">return</span> cleanup(end)
   }
 }</pre></div></div>
             

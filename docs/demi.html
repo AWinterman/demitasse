@@ -19,6 +19,11 @@
           <div id="jump_page">
             
               
+              <a class="source" href="docs-example.html">
+                docs-example.js
+              </a>
+            
+              
               <a class="source" href="demi.html">
                 demi.js
               </a>
@@ -43,7 +48,7 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <h1>Demi</h1>
-<h4>Demi is a micro-framework for javascript based on flask.</h4>
+<h4>Demi is a micro-framework for javascript based on <a href="http://flask.pocoo.org/">flask</a>.</h4>
 <p>It implements a nice api which was inspired by flask&#39;s use of decorator
 expressions. It is still a work in progress, so feel free to pitchin.</p>
 
@@ -54,7 +59,8 @@ expressions. It is still a work in progress, so feel free to pitchin.</p>
 <span class="keyword">var</span> StreamHandler = require(<span class="string">'./stream_handler'</span>)
   , http = require(<span class="string">"http"</span>)
   , url = require(<span class="string">"url"</span>)
-  , Stream = require(<span class="string">"stream"</span>)</pre></div></div>
+  , Stream = require(<span class="string">"stream"</span>)
+  , static = require(<span class="string">'node-static'</span>)</pre></div></div>
             
         </li>
         
@@ -70,7 +76,7 @@ expressions. It is still a work in progress, so feel free to pitchin.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">Demi</span><span class="params">(static_root)</span>{</span>
-  <span class="keyword">this</span>.static_root = static_root
+  <span class="keyword">this</span>.file = <span class="keyword">new</span> (static.Server)(static_root)
   <span class="keyword">this</span>.routes = []
 }
 
@@ -90,7 +96,7 @@ proto.constructor = cons</pre></div></div>
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <h2>Methods</h2>
-<p>** <code>.route(route)</code>
+<p><strong> <code>.route(route)</code> </strong>
 This method takes a route, and instantiates a StreamHandler to handle
 requests emitted to the route. Returns the route so that the user can define
 accompanying methods. </p>
@@ -115,9 +121,9 @@ be encouraged-- old routes will not be deleted.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> routes = [].slice.call(arguments)
-    , new_route = <span class="keyword">new</span> StreamHandler 
-  <span class="keyword">this</span>.routes.push({regexen: routes, response: new_route})
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> new_route = <span class="keyword">new</span> StreamHandler
+  <span class="keyword">var</span> routes = [].slice.call(arguments)
+  <span class="keyword">this</span>.routes.push({regexen: routes, responder: new_route})
   <span class="keyword">return</span> new_route
 }</pre></div></div>
             
@@ -130,7 +136,7 @@ be encouraged-- old routes will not be deleted.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>** <code>.get(pathname)</code>
+              <p><strong> <code>.get(pathname)</code></strong> 
 This finds the a route matching a pathname (as defined
 <a href="http://nodejs.org/docs/latest/api/url.html#url_url">here</a> if it can.
 Otherwise it returns a stream that only emits 404 events</p>
@@ -152,16 +158,20 @@ Otherwise it returns a stream that only emits 404 events</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> target 
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">var</span> responder = <span class="literal">null</span>
+    , embedded_args = []
+    , regex
   <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="keyword">this</span>.routes.length -<span class="number">1</span>; i &gt;= <span class="number">0</span>; --i){
     <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>, len = <span class="keyword">this</span>.routes[i].regexen.length; j &lt; len; ++j){
-      <span class="keyword">if</span> (<span class="keyword">new</span> RegExp(<span class="keyword">this</span>.routes[i].regexen[j]).test(pathname)) {
-        target = <span class="keyword">this</span>.routes[i].response
+      regex = <span class="keyword">new</span> RegExp(<span class="keyword">this</span>.routes[i].regexen[j])
+      <span class="keyword">if</span> (regex.test(pathname)) {
+        responder = <span class="keyword">this</span>.routes[i].responder
+        embedded_args = regex.exec(pathname).shift()
         <span class="keyword">break</span>
       }
     }
   }
-  <span class="keyword">return</span> target
+  <span class="keyword">return</span> [responder, embedded_args]
 }</pre></div></div>
             
         </li>
@@ -173,13 +183,14 @@ Otherwise it returns a stream that only emits 404 events</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>** <code>.run(port)</code></p>
+              <p><strong> <code>.run(port)</code> </strong></p>
 <p> Starts up an http server. This handles the events emitted by
  <a href="./stream_handler.js">StreamHandler</a></p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>proto.run = <span class="keyword">function</span>(port){
+  console.log(<span class="string">"running on port: "</span> + port)
   <span class="keyword">var</span> self = <span class="keyword">this</span>
     , server = http.createServer(demi_server)
 
@@ -189,24 +200,53 @@ Otherwise it returns a stream that only emits 404 events</p>
       , query = parsed.query || {}
       , stream
 
-    response_stream = self.get(pathname)
+    <span class="keyword">var</span> responder = self.get(pathname)
+    <span class="keyword">if</span> (!responder[<span class="number">0</span>]) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>then look the the file in the static files</p>
 
-    <span class="keyword">if</span> (!response_stream) {
-      resp.writeHead(<span class="number">404</span>, {<span class="string">'content-type'</span>: <span class="string">'text/plain'</span>})
-      process.nextTick(<span class="keyword">function</span>(){ resp.end(<span class="string">"blergh blergh blergh"</span>)})
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      req.on(<span class="string">"end"</span>, <span class="keyword">function</span>() {
+        self.file.serve(req, resp)
+      })
+      <span class="keyword">return</span>
     } <span class="keyword">else</span> {
-      response_stream.stream
+      responder[<span class="number">0</span>].stream
         .on(<span class="string">"headers"</span>, <span class="keyword">function</span>(headers){
-          resp.writeHead(<span class="number">200</span>, headers)
+          resp.writeHead(<span class="number">200</span>, headers(responder[<span class="number">1</span>]))
         })
         .on(<span class="string">"data"</span>, <span class="keyword">function</span>(data){
-          +resp.write(data)
+          <span class="string">""</span>+resp.write(data(responder[<span class="number">1</span>]))
         })
-        .on(<span class="string">"end"</span>, <span class="keyword">function</span>(data){
-          resp.end(data)
-        })
+        .on(<span class="string">"end"</span>, <span class="keyword">function</span>(cleanup){
+          resp.end(cleanup(responder[<span class="number">1</span>]))
+        })</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>may eventually want to allow cleanup on the end event, yet a third
+argument to the .on method</p>
 
-      response_stream.stream.emit(req.method, req)
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      responder[<span class="number">0</span>].stream.emit(req.method, req)
     }
   }
 

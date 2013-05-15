@@ -2,7 +2,7 @@
   "name": "demi",
   "version": "0.0.2-1",
   "description": "Flask your node",
-  "main": "lib/demi.js",
+  "main": "lib/index.js",
   "dependencies": {
     "node-static": "~0.6.9"
   },

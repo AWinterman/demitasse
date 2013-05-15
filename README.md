@@ -9,7 +9,8 @@ In your index.js file, you might have
 
 ```javascript
 
-var Demi = new require("demi")
+var Demi = require("demi")
+  , demi = new Demi("./public")
 
 demi.route("/")
     .on("GET", function(){
@@ -19,7 +20,6 @@ demi.route("/")
 ```
 
 
-
 Then from the command line you might run `demi run`, navigate to
 localhost:8000, and view the rendered string.  This will handle the streaming
 of response and the data type etc. for you.
@@ -27,7 +27,15 @@ of response and the data type etc. for you.
 
 ## Install ##
 
-``` npm install demi ``
+``` npm install demi ```
+
+## Examples ##
+
+There are examples in the examples/ directory. Run them with 
+
+```
+node examples/<example-name>
+```
 
 
 [0]: http://flask.pocoo.org/
