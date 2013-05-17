@@ -2,7 +2,7 @@
   "name": "demi",
   "version": "0.2.3",
   "description": "A Microframework for Node",
-  "main": "lib/demi.js",
+  "main": "./lib/demi.js",
   "dependencies": {
     "node-static": "~0.6.9"
   },
