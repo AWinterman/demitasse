@@ -13,8 +13,8 @@ var Demi = require("demi")
   , demi = new Demi("./public")
 
 demi.route("/")
-    .on("GET", function(){
-        return "hello world"
+    .on("GET", function(req, resp){
+      resp.write("hello world")
     })
        
 ```
