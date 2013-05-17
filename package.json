@@ -1,6 +1,6 @@
 {
   "name": "demi",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A Microframework for Node",
   "main": "lib/demi.js",
   "dependencies": {
