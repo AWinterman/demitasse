@@ -92,7 +92,6 @@ proto.run = function(port){
 
     var responder = self.get(pathname)
     if (!responder[0]) {
-      console.log(self.static_callback)
       // then look the the file in the static files
       req.on("end", function() {
         self.file.serve(req, resp, self.static_callback)
