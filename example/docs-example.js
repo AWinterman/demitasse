@@ -2,6 +2,9 @@
 //  `[docco](http://jashkenas.github.io/docco/)` to display the source code of
 //  `demi` itself. This example assumes you'd run it from the project root.
 //
+//  It depends on the `docco` command, so if you havent got it, `npm install -g docco`
+//
+//  The module supposes you run it from the project root.
 
 /* By Andrew Winterman */
 
@@ -17,37 +20,35 @@ var fs = require("fs")
 // `demi` will serve up static files from here upon request. No need to get up, 
 // `docco` will create a docs file into which it will place the its generated
 // html and css.
-var demi = new Demi("./docs")
+var demi = new Demi("./docs", on_static_load)
   , indexHTML 
 
-
-// Docco has lacks support for iterating over directories. You hand it file
-// names, it spits out one html file per input, and that's it. So this
-// backticks and bash wildcards it is.
-
-exec("docco `echo example/* lib/*`", function(err, stdout, stderr){
-  console.log(stdout)
-  indexHTML = fs.readFileSync("./docs/docs-example.html")
-})
-
-
-// Finally, supposing we have the indexHTML, we render it. Otherwise, some
-// placeholder html saying, "nope, not done yet". The awkwardness of this is
-// strong argument for moving away from the `function(req){ return string}`
-// paradigm, and instead passing `function(req, resp)`, and letting the user
-// take advantage of event emmitters, etc. There really is something to be said
-// for using the established patterns. Concievably, I could still support
-// returning a string, but given that even reading from the file system is
-// generally asynchronous it doesn't really seem to make much sense.
-
+// Add a route and define what should happen on GET. Anything else will get a
+// standard error message.
 demi.route("^/$", "index.html")
-    .on("GET", function(req){
-      if(!indexHTML){
-        return "<body> <head><title>loading</title> loading... /body>"
-      } else {
-        return indexHTML
-      }
-    })
+    .on("GET", doccer)
+
+// `landing` defines what happens when you hit the landing page. It
+// just makes sure the docco'd source of this file gets displayed
+function doccer(req, resp){
+  var headers = {"Content-Type":"text/html"}
+  resp.writeHead(headers)
+  fs.readFile("./docs/docs-example.html", function(err, data){
+    resp.write(data)
+    resp.end()
+  })
+}
+
+// This is a little rediculous-- every time a static file is loaded, this is
+// going to rerun docco on every source file. At least it happens
+// asynchronously
+function on_static_load(err, data){
+  exec("docco `echo example/* lib/*`", function(err, stdout, stderr){ 
+    console.log(stdout)
+    console.log(stderr)
+  })
+}
+
 
 // now run it.
 demi.run(8769)
