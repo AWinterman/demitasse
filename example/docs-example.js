@@ -9,7 +9,7 @@
 /* By Andrew Winterman */
 
 //  First things first, we need demi...
-var Demi = require("../lib/demi")
+var Demi = require("../index")
 
 // ... and a few system utilities.
 var fs = require("fs")
@@ -25,7 +25,7 @@ var demi = new Demi("./docs", on_static_load)
 
 // Add a route and define what should happen on GET. Anything else will get a
 // standard error message.
-demi.route("^/$", "index.html")
+demi.route("^/$")
     .on("GET", doccer)
 
 // `landing` defines what happens when you hit the landing page. It
@@ -43,7 +43,7 @@ function doccer(req, resp){
 // going to rerun docco on every source file. At least it happens
 // asynchronously
 function on_static_load(err, data){
-  exec("docco `echo example/* lib/*`", function(err, stdout, stderr){ 
+  exec("docco `echo index.js example/* lib/*`", function(err, stdout, stderr){ 
     console.log(stdout)
     console.log(stderr)
   })

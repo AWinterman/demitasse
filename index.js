@@ -8,7 +8,7 @@
 //
 module.exports = Demi
 
-var StreamHandler = require('./stream_handler')
+var StreamHandler = require('./lib/stream_handler')
   , http = require("http")
   , url = require("url")
   , Stream = require("stream")
